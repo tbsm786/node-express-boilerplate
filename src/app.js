@@ -1,3 +1,9 @@
+/**
+ * Express application factory.
+ * This module wires every cross-cutting middleware (logging, security, auth)
+ * and finally mounts the versioned API router. Keeping the setup centralized
+ * makes it easy to reason about the request lifecycle from top to bottom.
+ */
 const express = require('express');
 const helmet = require('helmet');
 const xss = require('xss-clean');
@@ -16,6 +22,7 @@ const ApiError = require('./utils/ApiError');
 
 const app = express();
 
+// Attach verbose request logging outside of tests to keep CI noise low.
 if (config.env !== 'test') {
   app.use(morgan.successHandler);
   app.use(morgan.errorHandler);
